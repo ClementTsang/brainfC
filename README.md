@@ -1,4 +1,4 @@
-# brainf--C
+# brainfC
 A brainf**k &lt;=&gt; C compiler.  Useful?  No.  Educational?  At least for me, yes.
 
 ## Instructions to use
