@@ -8,8 +8,18 @@ import (
 
 func main() {
 	if len(os.Args) < 1 {
-		fmt.Println("Must include a file to convert.")
+		fmt.Println("Must include a file to convert or an argument.")
 	}
-	filePath := os.Args[1:2]
-	bftoc.ConvertBFToC(filePath[0])
+
+	switch flag := os.Args[1:2][0]; flag {
+	case "--help":
+		fallthrough
+	case "-h":
+		// Give help documentation
+	case "-c":
+		filePath := os.Args[2:3][0]
+		bftoc.ConvertBFToC(filePath)
+	case "-b":
+	default:
+	}
 }

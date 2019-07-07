@@ -126,8 +126,8 @@ type bfToken interface {
 	getTokenChar() rune
 }
 
-func lexBF(filePath string) []bfToken {
-	result := make([]bfToken, 0, 2)
+func lexBF(filePath string) (result []bfToken) {
+	result = make([]bfToken, 0, 2)
 	file, err := os.Open(filePath)
 
 	if err != nil {
@@ -167,10 +167,22 @@ func lexBF(filePath string) []bfToken {
 		}
 	}
 
-	return result
+	return
 }
 
-func genCCode(bfTokens *[]bfToken, filePath string) {
+func genCCode(bfTokens *[]bfToken) (lineSlice []string) {
+	lineSlice = make([]string, 0, 2)
+	for _, token := range *bfTokens {
+		lineSlice = append(lineSlice, token.convertToC())
+	}
+	return
+}
+
+func optimizeBFToC() (optimizedLineSlice []string) {
+	return
+}
+
+func writeToFile(lineSlice *[]string, filePath string) {
 	dir, file := filepath.Split(filePath)
 	fileToWrite := strings.TrimSuffix(file, filepath.Ext(file)) + ".c"
 
@@ -193,8 +205,8 @@ func genCCode(bfTokens *[]bfToken, filePath string) {
 	w.WriteString(prologue)
 	w.Flush()
 
-	for _, token := range *bfTokens {
-		_, err := w.WriteString(token.convertToC())
+	for _, line := range *lineSlice {
+		_, err := w.WriteString(line)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -207,15 +219,12 @@ func genCCode(bfTokens *[]bfToken, filePath string) {
 	w.Flush()
 }
 
-func optimizeBFToC() {
-
-}
-
 // ConvertBFToC translates BF code into C code
 func ConvertBFToC(inputFile string) {
 	// Lex
 	tokenSlice := lexBF(inputFile)
 
 	// Generate C code and write
-	genCCode(&tokenSlice, inputFile)
+	lineArray := genCCode(&tokenSlice)
+	writeToFile(&lineArray, inputFile)
 }
