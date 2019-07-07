@@ -2,10 +2,11 @@ package bftoc
 
 import (
 	"bufio"
-	"fmt"
 	"io"
 	"log"
 	"os"
+	"path/filepath"
+	"strings"
 )
 
 // rightArrowToken represents the ">" token
@@ -136,7 +137,6 @@ func lexBF(filePath string) []bfToken {
 
 	scanner := bufio.NewReader(file)
 	for {
-		nonWhiteSpace := true
 		rune, _, err := scanner.ReadRune()
 		if err != nil && err != io.EOF {
 			log.Fatal(err)
@@ -160,12 +160,6 @@ func lexBF(filePath string) []bfToken {
 			result = append(result, leftBracketToken{})
 		case ']':
 			result = append(result, rightBracketToken{})
-		default:
-			nonWhiteSpace = false
-		}
-
-		if nonWhiteSpace {
-			fmt.Printf("Saw a %c token.\n", result[len(result)-1].getTokenChar())
 		}
 
 		if err == io.EOF {
@@ -176,24 +170,52 @@ func lexBF(filePath string) []bfToken {
 	return result
 }
 
-func parseBF() {
-	fmt.Println("Parsing BF...")
+func genCCode(bfTokens *[]bfToken, filePath string) {
+	dir, file := filepath.Split(filePath)
+	fileToWrite := strings.TrimSuffix(file, filepath.Ext(file)) + ".c"
+
+	// Check if it exists first, if so, delete
+	if _, err := os.Stat(dir + fileToWrite); !os.IsNotExist(err) {
+		os.Remove(dir + fileToWrite)
+	}
+
+	f, err := os.Create(dir + fileToWrite)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer f.Close()
+	w := bufio.NewWriter(f)
+
+	// Always start with writing prologue:
+	prologue := "#include <stdio.h>\nint main() {\nchar array[5000000] = {0};\nchar *ptr = array;\n"
+	w.WriteString(prologue)
+	w.Flush()
+
+	for _, token := range *bfTokens {
+		_, err := w.WriteString(token.convertToC())
+		if err != nil {
+			log.Fatal(err)
+		}
+		w.Flush()
+	}
+
+	// End with writing epilogue:
+	epilogue := "}\n"
+	w.WriteString(epilogue)
+	w.Flush()
 }
 
-func genCCode() {
-
-}
-
-func writeC() {
+func optimizeBFToC() {
 
 }
 
 // ConvertBFToC translates BF code into C code
 func ConvertBFToC(inputFile string) {
 	// Lex
-	lexBF(inputFile)
+	tokenSlice := lexBF(inputFile)
 
-	// Parse
-
-	// Generate C code
+	// Generate C code and write
+	genCCode(&tokenSlice, inputFile)
 }
