@@ -10,3 +10,9 @@
 
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
+
+# Ignore generated binaries
+examples/simple_add
+examples/rot13/rot13
+examples/hello_world
+examples/peephole/peephole
