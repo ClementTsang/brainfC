@@ -328,8 +328,6 @@ func optimizeBFToC(bfTokens *[]bfToken) {
 	}
 	// Reduce slice to whatever is left.
 	*bfTokens = (*bfTokens)[:canOverwriteIndex]
-
-	// * Dead code removal if possible
 }
 
 func formatCCode(lineSlice *[]*string) {
@@ -389,13 +387,15 @@ func writeToFile(lineSlice *[]*string, filePath string) {
 func ConvertBFToC(inputFile string, toOptimize bool, toFormat bool) {
 	var lineArray []*string
 	tokenSlice := lexBF(inputFile)
-	// Lex
+
 	if toOptimize {
+		// We get really lucky since BF is so simple; our intermediate language is basically just BF.
 		optimizeBFToC(&tokenSlice)
 	}
 
-	// Generate C code and write
 	lineArray = genCCode(&tokenSlice)
-	formatCCode(&lineArray)
+	if toFormat {
+		formatCCode(&lineArray)
+	}
 	writeToFile(&lineArray, inputFile)
 }
