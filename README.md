@@ -1,5 +1,5 @@
 # brainfC
-A Brainf\*\*k &lt;=&gt; C compiler.  Useful?  No, not at all (unless you really want to convert C to BF or vice versa).  Educational?  At least for me, yes --- it was an interesting way to use what I've learned in compiler design in class, as well as learn Go, albeit in a way that was neither really productive or practical.
+A Brainf\*\*k &lt;=&gt; C translator.  Useful?  No, not at all (unless you really want to convert C to BF or vice versa).  Educational?  At least for me, yes --- it was an interesting way to apply what I've learned in compiler design from class (a bunch of what I learned carried over), as well as learn Go, albeit in a way that was neither really productive or practical.
 
 Note the code I write is probably not the prettiest or best practice Go... I'm quite new to this language, hopefully this will improve as this project progresses.
 
