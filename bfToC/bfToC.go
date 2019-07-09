@@ -385,7 +385,6 @@ func writeToFile(lineSlice *[]*string, filePath string) {
 
 // ConvertBFToC translates BF code into C code
 func ConvertBFToC(inputFile string, toOptimize bool, toFormat bool) {
-	var lineArray []*string
 	tokenSlice := lexBF(inputFile)
 
 	if toOptimize {
@@ -393,7 +392,7 @@ func ConvertBFToC(inputFile string, toOptimize bool, toFormat bool) {
 		optimizeBFToC(&tokenSlice)
 	}
 
-	lineArray = genCCode(&tokenSlice)
+	lineArray := genCCode(&tokenSlice)
 	if toFormat {
 		formatCCode(&lineArray)
 	}

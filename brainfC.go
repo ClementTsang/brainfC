@@ -2,6 +2,7 @@ package main
 
 import (
 	bftoc "brainfC/bfToC"
+	ctobf "brainfc/cToBF"
 	"fmt"
 	"os"
 )
@@ -28,6 +29,8 @@ func main() {
 		filePath := os.Args[2:3][0]
 		bftoc.ConvertBFToC(filePath, true, true)
 	case "-b":
+		filePath := os.Args[2:3][0]
+		ctobf.ConvertCToBF(filePath, true, true)
 	default:
 		fmt.Println("Please input a valid command.  Type 'brainfC --help` for a list of valid flags.")
 	}
