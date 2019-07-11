@@ -32,4 +32,9 @@ If you want to interpret the resulting BF code, use something like [Beef](https:
 If you spot a bug/typo/issue and/or want to contribute, let me know.
 
 ## Credits/Thanks
-I referred to the source code of [c2bf](https://github.com/arthaud/c2bf) a lot for the C =&gt; component.  Some BF code samples in the [examples](./examples) directory was sourced from the [Brainf\*\*k Wikipedia article](https://en.wikipedia.org/wiki/Brainfuck).  Many of the BF algorithms used for converting from C to BF were sourced from the [Esolangs wiki for Brainf\*\*k](https://esolangs.org/wiki/Brainfuck_algorithms).
+Bunch of resources/projects I have to give thanks to.
+
+* I referred to the source code of [c2bf](https://github.com/arthaud/c2bf) a lot for the C =&gt; component.
+* Some BF code samples in the [examples](./examples) directory was sourced from the [Brainf\*\*k Wikipedia article](https://en.wikipedia.org/wiki/Brainfuck).
+* Many of the BF algorithms used for converting from C to BF were sourced from the [Esolangs wiki for Brainf\*\*k](https://esolangs.org/wiki/Brainfuck_algorithms).
+* yacc code for C to BF was based on [the yacc file from this website](http://www.quut.com/c/ANSI-C-grammar-y.html), and the lexer was based on [this page from the same website](http://www.quut.com/c/ANSI-C-grammar-l-2011.html). 
