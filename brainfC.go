@@ -2,7 +2,7 @@ package main
 
 import (
 	bftoc "brainfC/bfToC"
-	ctobf "brainfc/cToBF"
+	ctobf "brainfC/cToBF"
 	"fmt"
 	"os"
 )

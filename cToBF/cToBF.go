@@ -9,13 +9,6 @@ import (
 )
 
 // TODO: Add functions for interface like convertToBF()
-// TODO: Move these to another file, jeez
-type cToken interface {
-}
-
-func lexC(filePath string) (result []cToken) {
-	return
-}
 
 func genBFCode(tokenSlice *[]*cToken) (lineSlice []*string) {
 	return
@@ -63,6 +56,7 @@ func ConvertCToBF(inputFile string, toOptimize bool, toFormat bool) {
 	// Lex
 	var lineArray []*string
 	var tokenSlice []*cToken
+	lexC(inputFile)
 
 	// Generate BF code and write
 	lineArray = genBFCode(&tokenSlice)
