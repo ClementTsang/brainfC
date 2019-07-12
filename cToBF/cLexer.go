@@ -7,20 +7,20 @@ import (
 	"os"
 )
 
-type cToken interface {
-	getCombinedRegexValue() string
+type CToken interface {
 }
 
 type runeComponents interface {
 	getRegexValue() string
 }
 
-func getToken(str string) (result cToken) {
+func getToken(str string) (result CToken) {
+
 	return
 }
 
-func lexC(filePath string) (result []cToken) {
-	result = make([]cToken, 0, 2)
+func lexC(filePath string) (result []CToken) {
+	result = make([]CToken, 0, 2)
 	file, err := os.Open(filePath)
 
 	if err != nil {
