@@ -1,11 +1,7 @@
 /*yacc file originally sourced from http://www.quut.com/c/ANSI-C-grammar-y.html*/
 
 %{
-package cParser
-
-func setResult(l yyLexer, v Result) {
-	l.(*lex).result = v
-}
+package ctobf
 %}
 
 %token	IDENTIFIER I_CONSTANT F_CONSTANT STRING_LITERAL FUNC_NAME SIZEOF
