@@ -1,20 +1,24 @@
 # brainfC
-A Brainf\*\*k &lt;=&gt; C transpiler.  Useful?  No, not at all (unless you really want to convert C to BF or vice versa).  Educational?  At least for me, yes --- it was an interesting way to apply what I've learned in compiler design from class (a bunch of what I learned carried over), as well as learn Go, albeit in a way that was neither really productive or practical.
+
+A Brainf\*\*k &lt;=&gt; C transpiler.
 
 Note the code I write is probably not the prettiest or best practice Go... I'm quite new to this language, hopefully this will improve as this project progresses.
 
 ## Instructions to Install
+
 Clone the repo into your Go path.  Go to the cloned repo directory and run the makefile.
 
 ## Features (so far)
-* Convert from BF to somewhat optimized C code
+
+* Convert from BF to somewhat optimized (but not really) C code
 	* Optimizations include:
 		* Peephole optimization
 		* Duplicate instruction optimization
 * Convert from (a subset of) C to BF
 	* Current C syntax that is supported:
 
-## Demo
+## Usage
+
 To convert BF to C in command line, for example:
 ```bash
 ./brainfC -c ./examples/bf_samples/hello_world/hello_world.bf
@@ -26,10 +30,19 @@ Likewise, to convert C to BF in command line:
 ```
 If you want to interpret the resulting BF code, use something like [Beef](https://kiyuko.org/software/beef).
 
+
+# Demo
+
 *TODO: Insert demo using github pages*
 
 ## Contribution
 If you spot a bug/typo/issue and/or want to contribute, let me know.
+
+## Why...?
+
+Why not?
+
+It was mostly an interesting way to apply what I've learned in compiler design from class (a bunch of what I learned carried over), as well as try to use Go, albeit in a way that was neither really productive or practical.
 
 ## Credits/Thanks
 Bunch of resources/projects I have to give thanks to.

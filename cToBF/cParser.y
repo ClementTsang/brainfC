@@ -2,6 +2,13 @@
 
 %{
 package ctobf
+
+import (
+	"bufio"
+	"io"
+	"log"
+	"os"
+)
 %}
 
 %token	IDENTIFIER I_CONSTANT F_CONSTANT STRING_LITERAL FUNC_NAME SIZEOF
@@ -530,6 +537,24 @@ declaration_list
 	| declaration_list declaration
 	;
 
-%%
+%% /* Begin Reader */
+
+type yyLex struct {
+	
+}
+
+type yySymType struct {
+
+}
+
+func (l *yyLex) Error(s string) {
+	fmt.Printf("Syntax error: %s\n" s)
+}
+
+func (l *yyLex) Lex(lval *yySymType) int {
+	// Use tokens!
+}
+
+
 
 

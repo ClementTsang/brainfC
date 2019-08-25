@@ -18,6 +18,7 @@ func main() {
 	* Add input and output flags?
 	* Add "I want formatting" flag
 	* Add debug flag
+	* Validate file type?
 	 */
 
 	switch flag := os.Args[1:2][0]; flag {
@@ -25,10 +26,14 @@ func main() {
 		fallthrough
 	case "-h":
 		// Give help documentation
-	case "-c":
+	case "--bf-to-c":
+		fallthrough
+	case "-b":
 		filePath := os.Args[2:3][0]
 		bftoc.ConvertBFToC(filePath, true, true)
-	case "-b":
+	case "--c-to-bf":
+		fallthrough
+	case "-c":
 		filePath := os.Args[2:3][0]
 		ctobf.ConvertCToBF(filePath, true, true)
 	default:
