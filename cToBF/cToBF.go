@@ -3,7 +3,7 @@ package ctobf
 import (
 	"bufio"
 	"fmt"
-	"io"
+	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
@@ -165,7 +165,7 @@ func isValidMultiCharSymbol(currentStringGrouping string, runeSlice ...rune) (re
 	case "*":
 		result = (currentRune == '=' || currentRune == '/')
 	case "/":
-		result = (currentRune == '=' || currentRune == '*')
+		result = (currentRune == '/' || currentRune == '=' || currentRune == '*')
 	case "+":
 		result = (currentRune == '+' || currentRune == '=')
 	case "-":
@@ -192,8 +192,23 @@ func getTokensForLine(line string) (result []*cToken) {
 	// Crawl by character!
 	line += " " // Cheat by appending a newline, so the last character in the line will also be output
 	currentStringGrouping := ""
+	currentlyInLineComment := false
+	currentlyInBlockComment := false
+	skipBlock := false
+
 	for pos, currentChar := range line {
-		if unicode.IsSpace(currentChar) {
+		if currentChar == '\n' {
+			currentlyInLineComment = false
+		} else if currentlyInLineComment || skipBlock {
+			skipBlock = false
+			continue
+		} else if currentlyInBlockComment {
+			if pos+1 < len(line) && []rune(line)[pos+1] == '/' && currentChar == '*' {
+				currentlyInBlockComment = false
+				skipBlock = true
+			}
+			continue
+		} else if unicode.IsSpace(currentChar) {
 
 			if currentStringGrouping != "" {
 				result = append(result, getCToken(currentStringGrouping))
@@ -206,6 +221,16 @@ func getTokensForLine(line string) (result []*cToken) {
 			if currentStringGrouping == "" || (currentStringGrouping != "" && pos+1 < len(line) && isValidMultiCharSymbol(currentStringGrouping, currentChar, []rune(line)[pos+1])) {
 				// Check to see if this character can continue to form a valid token with the currentStringGrouping
 				currentStringGrouping += string(currentChar)
+
+				if currentStringGrouping == "//" {
+					currentlyInLineComment = true
+					currentStringGrouping = ""
+					continue
+				} else if currentStringGrouping == "/*" {
+					currentlyInBlockComment = true
+					currentStringGrouping = ""
+					continue
+				}
 
 				if !isCSymbol([]rune(line)[pos+1]) {
 					result = append(result, getCToken(currentStringGrouping))
@@ -230,31 +255,11 @@ func getTokensForLine(line string) (result []*cToken) {
 
 func lexC(filePath string) (result []*cToken) {
 	result = make([]*cToken, 0, 2)
-	file, err := os.Open(filePath)
+	buf, err := ioutil.ReadFile(filePath)
 
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer file.Close()
-
-	scanner := bufio.NewReader(file)
-	for {
-		str, err := scanner.ReadString('\n') // read every line
-		if err != nil && err != io.EOF {
-			log.Fatal(err)
-			break
-		}
-
-		// Instead, read as a full string, and trim all comments first!
-
-		str = strings.TrimSpace(str) // trim newlines
-
-		// Read every string as a token here
+	if err == nil {
+		str := string(buf)
 		result = append(result, getTokensForLine(str)...)
-
-		if err == io.EOF {
-			break
-		}
 	}
 
 	return

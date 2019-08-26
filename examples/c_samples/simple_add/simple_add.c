@@ -13,3 +13,4 @@ int main() {
 
 	return 40 + 2 + (abc - 5) * 3 - 30;
 }
+//test
