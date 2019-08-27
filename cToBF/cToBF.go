@@ -101,7 +101,52 @@ func getCToken(stringGrouping string) (result *cToken) {
 	} else if stringGrouping == funcName {
 		tokenType = "FUNC_NAME"
 	} else if arrayContains(validMultiCharSymbols, stringGrouping) {
-		tokenType = "MUTLICHAR" //TODO: Return correct multicharsymbol
+		switch stringGrouping {
+		case "...":
+			tokenType = "ELLIPSIS"
+		case ">>=":
+			tokenType = "RIGHT_ASSIGN"
+		case "<<=":
+			tokenType = "LEFT_ASSIGN"
+		case "+=":
+			tokenType = "ADD_ASSIGN"
+		case "-=":
+			tokenType = "SUB_ASSIGN"
+		case "*=":
+			tokenType = "MUL_ASSIGN"
+		case "/=":
+			tokenType = "DIV_ASSIGN"
+		case "%=":
+			tokenType = "MOD_ASSIGN"
+		case "&=":
+			tokenType = "ADD_ASSIGN"
+		case "^=":
+			tokenType = "XOR_ASSIGN"
+		case "|=":
+			tokenType = "OR_ASSIGN"
+		case ">>":
+			tokenType = "RIGHT_OP"
+		case "<<":
+			tokenType = "LEFT_OP"
+		case "++":
+			tokenType = "INC_OP"
+		case "--":
+			tokenType = "LEFT_OP"
+		case "->":
+			tokenType = "PTR_OP"
+		case "&&":
+			tokenType = "AND_OP"
+		case "||":
+			tokenType = "OR_OP"
+		case "<=":
+			tokenType = "LE_OP"
+		case ">=":
+			tokenType = "GE_OP"
+		case "==":
+			tokenType = "EQ_OP"
+		case "!=":
+			tokenType = "NE_OP"
+		}
 	} else if arrayContains(validSingleCharSymbols, stringGrouping) {
 		switch stringGrouping {
 		case "<%":
@@ -116,7 +161,7 @@ func getCToken(stringGrouping string) (result *cToken) {
 			tokenType = stringGrouping
 		}
 	} else if checkTypeRegex.MatchString(stringGrouping) {
-		tokenType = "CHKTYPE" //TODO: Checktype
+		tokenType = "ID" //TODO: Checktype
 	} else if iConstantRegexOne.MatchString(stringGrouping) ||
 		iConstantRegexTwo.MatchString(stringGrouping) ||
 		iConstantRegexThree.MatchString(stringGrouping) ||
