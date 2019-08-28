@@ -544,17 +544,19 @@ type yyLex struct {
 }
 
 type yySymType struct {
-
+	yys int
 }
 
 func (l *yyLex) Error(s string) {
-	fmt.Printf("Syntax error: %s\n" s)
+	fmt.Printf("Syntax error: %s\n", s)
 }
 
 func (l *yyLex) Lex(lval *yySymType) int {
 	// Use tokens!
+
+	return 0
 }
 
-
-
-
+func parseTokens (tokenSlice []*cToken) {
+	
+}

@@ -2,7 +2,6 @@ package ctobf
 
 import (
 	"bufio"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
@@ -75,10 +74,6 @@ var stringLiteralRegex = regexp.MustCompile("(" + sp + "?" + "\\\"([^\"\\\\\n]|"
 type cToken struct {
 	actualVal  string
 	cTokenType string
-}
-
-func genBFCode(tokenSlice []*cToken) (lineSlice []*string) {
-	return
 }
 
 func arrayContains(arr []string, targ string) bool {
@@ -355,11 +350,7 @@ func ConvertCToBF(inputFile string, toOptimize bool, toFormat bool) {
 
 	tokenSlice = lexC(inputFile)
 
-	for _, token := range tokenSlice {
-		fmt.Printf("Token: %s => %s\n", token.actualVal, token.cTokenType)
-	}
-
 	// Generate BF code and write
-	lineArray = genBFCode(tokenSlice)
+	parseTokens(tokenSlice)
 	writeToFile(&lineArray, inputFile)
 }
