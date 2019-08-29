@@ -33,7 +33,7 @@ If you want to interpret the resulting BF code, use something like [Beef](https:
 
 # Demo
 
-*TODO: Insert demo using github pages*
+An online demo can be seen [here](https://clementtsang.github.io/brainfC/).
 
 ## Contribution
 If you spot a bug/typo/issue and/or want to contribute, let me know.

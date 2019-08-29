@@ -71,11 +71,6 @@ var stringLiteralRegex = regexp.MustCompile("(" + sp + "?" + "\\\"([^\"\\\\\n]|"
 
 // TODO: Add functions for interface like convertToBF()
 
-type cToken struct {
-	actualVal  string
-	cTokenType string
-}
-
 func arrayContains(arr []string, targ string) bool {
 	for _, ele := range arr {
 		if ele == targ {
@@ -85,10 +80,11 @@ func arrayContains(arr []string, targ string) bool {
 	return false
 }
 
-func getCToken(stringGrouping string) (result *cToken) {
+func getCToken(stringGrouping string) (result *yyLex) {
 	//fmt.Printf("Looking for CToken for %s\n", stringGrouping)
 
 	tokenType := "UNKNOWN"
+	terminalType := -1
 	if arrayContains(validKeywords, stringGrouping) {
 		tokenType = strings.ToUpper(stringGrouping)
 	} else if arrayContains(underscoredKeywords, stringGrouping) {
@@ -156,7 +152,7 @@ func getCToken(stringGrouping string) (result *cToken) {
 			tokenType = stringGrouping
 		}
 	} else if checkTypeRegex.MatchString(stringGrouping) {
-		tokenType = "ID" //TODO: Checktype
+		tokenType = "IDENTIFIER" //TODO: Checktype
 	} else if iConstantRegexOne.MatchString(stringGrouping) ||
 		iConstantRegexTwo.MatchString(stringGrouping) ||
 		iConstantRegexThree.MatchString(stringGrouping) ||
@@ -172,7 +168,7 @@ func getCToken(stringGrouping string) (result *cToken) {
 		tokenType = "STRING_LITERAL"
 	}
 
-	result = &cToken{actualVal: stringGrouping, cTokenType: tokenType}
+	result = &yyLex{actualVal: stringGrouping, nonTerminalType: tokenType, terminalType: terminalType}
 
 	return
 }
@@ -227,7 +223,7 @@ func isValidMultiCharSymbol(currentStringGrouping string, runeSlice ...rune) (re
 	return
 }
 
-func getTokensForLine(line string) (result []*cToken) {
+func getTokensForLine(line string) (result []*yyLex) {
 
 	// Crawl by character!
 	line += " " // Cheat by appending a newline, so the last character in the line will also be output
@@ -293,8 +289,8 @@ func getTokensForLine(line string) (result []*cToken) {
 	return
 }
 
-func lexC(filePath string) (result []*cToken) {
-	result = make([]*cToken, 0, 2)
+func lexC(filePath string) (result []*yyLex) {
+	result = make([]*yyLex, 0, 2)
 	buf, err := ioutil.ReadFile(filePath)
 
 	if err == nil {
@@ -345,12 +341,12 @@ func writeToFile(lineSlice *[]*string, filePath string) {
 // ConvertCToBF translates C code into BF code
 func ConvertCToBF(inputFile string, toOptimize bool, toFormat bool) {
 	// Lex
-	var lineArray []*string
-	var tokenSlice []*cToken
+	//var lineArray []*string
+	var tokenSlice []*yyLex
 
 	tokenSlice = lexC(inputFile)
 
 	// Generate BF code and write
 	parseTokens(tokenSlice)
-	writeToFile(&lineArray, inputFile)
+	//writeToFile(&lineArray, inputFile)
 }

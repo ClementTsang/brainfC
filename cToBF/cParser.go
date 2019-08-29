@@ -3,12 +3,18 @@
 //line cParser.y:4
 package ctobf
 
-import (
-	"fmt"
-	__yyfmt__ "fmt"
-)
+import __yyfmt__ "fmt"
 
 //line cParser.y:4
+import (
+	"fmt"
+)
+
+//line cParser.y:15
+type yySymType struct {
+	yys int
+	val int
+}
 
 const IDENTIFIER = 57346
 const I_CONSTANT = 57347
@@ -192,14 +198,13 @@ const yyEofCode = 1
 const yyErrCode = 2
 const yyInitialStackSize = 16
 
-//line cParser.y:540
+//line cParser.y:545
 /* Begin Reader */
 
 type yyLex struct {
-}
-
-type yySymType struct {
-	yys int
+	actualVal       string
+	nonTerminalType string
+	terminalType    int
 }
 
 func (l *yyLex) Error(s string) {
@@ -212,8 +217,11 @@ func (l *yyLex) Lex(lval *yySymType) int {
 	return 0
 }
 
-func parseTokens(tokenSlice []*cToken) {
-
+func parseTokens(tokenSlice []*yyLex) {
+	fmt.Printf("Parsing tokens...\n")
+	for _, token := range tokenSlice {
+		yyParse(token)
+	}
 }
 
 //line yacctab:1

@@ -5,11 +5,16 @@ package ctobf
 
 import (
 	"bufio"
+	"fmt"
 	"io"
 	"log"
 	"os"
 )
 %}
+
+%union {
+	val int
+}
 
 %token	IDENTIFIER I_CONSTANT F_CONSTANT STRING_LITERAL FUNC_NAME SIZEOF
 %token	PTR_OP INC_OP DEC_OP LEFT_OP RIGHT_OP LE_OP GE_OP EQ_OP NE_OP
@@ -540,23 +545,24 @@ declaration_list
 %% /* Begin Reader */
 
 type yyLex struct {
-	
-}
-
-type yySymType struct {
-	yys int
+	actualVal string
+	nonTerminalType string
+	terminalType int
 }
 
 func (l *yyLex) Error(s string) {
-	fmt.Printf("Syntax error: %s\n", s)
+	fmt.Printf("Error: %s\n", s)
 }
 
 func (l *yyLex) Lex(lval *yySymType) int {
 	// Use tokens!
 
-	return 0
+	return 0;
 }
 
-func parseTokens (tokenSlice []*cToken) {
-	
+func parseTokens (tokenSlice []*yyLex) {
+	fmt.Printf("Parsing tokens...\n")
+	for _, token := range tokenSlice {
+		yyParse(token)
+	}
 }

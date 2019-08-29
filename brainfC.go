@@ -18,7 +18,6 @@ func main() {
 	* Add input and output flags?
 	* Add "I want formatting" flag
 	* Add debug flag
-	* Validate file type?
 	 */
 
 	switch flag := os.Args[1:2][0]; flag {
