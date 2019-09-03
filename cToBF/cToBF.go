@@ -38,7 +38,7 @@ var validKeywords = []string{
 }
 
 var underscoredKeywords = []string{
-	"_Alignas", "_Alignof", "_Atomic", "_Bool", "_Complex", "_Generic", "_Imaginary", "_Noreturn", "_Static_Assert", "_Thread_local",
+	"_Alignas", "_Alignof", "_Atomic", "_Bool", "_Complex", "_Generic", "_Imaginary", "_Noreturn", "_Static_assert", "_Thread_local",
 }
 
 const funcName = "__func__"
@@ -83,92 +83,182 @@ func arrayContains(arr []string, targ string) bool {
 func getCToken(stringGrouping string) (result *yyLex) {
 	//fmt.Printf("Looking for CToken for %s\n", stringGrouping)
 
-	tokenType := "UNKNOWN"
-	terminalType := -1
+	intValue := -1
+	runeValue := ' '
 	if arrayContains(validKeywords, stringGrouping) {
-		tokenType = strings.ToUpper(stringGrouping)
+		switch stringGrouping {
+		case "auto":
+			intValue = AUTO
+		case "break":
+			intValue = BREAK
+		case "case":
+			intValue = CASE
+		case "char":
+			intValue = CHAR
+		case "const":
+			intValue = CONST
+		case "continue":
+			intValue = CONTINUE
+		case "default":
+			intValue = DEFAULT
+		case "do":
+			intValue = DO
+		case "double":
+			intValue = DOUBLE
+		case "else":
+			intValue = ELSE
+		case "enum":
+			intValue = ENUM
+		case "extern":
+			intValue = EXTERN
+		case "float":
+			intValue = FLOAT
+		case "for":
+			intValue = FOR
+		case "goto":
+			intValue = GOTO
+		case "if":
+			intValue = IF
+		case "inline":
+			intValue = INLINE
+		case "int":
+			intValue = INT
+		case "long":
+			intValue = LONG
+		case "register":
+			intValue = REGISTER
+		case "restrict":
+			intValue = RESTRICT
+		case "return":
+			intValue = RETURN
+		case "short":
+			intValue = SHORT
+		case "signed":
+			intValue = SIGNED
+		case "sizeof":
+			intValue = SIZEOF
+		case "static":
+			intValue = STATIC
+		case "struct":
+			intValue = STRUCT
+		case "switch":
+			intValue = SWITCH
+		case "typedef":
+			intValue = TYPEDEF
+		case "union":
+			intValue = UNION
+		case "unsigned":
+			intValue = UNSIGNED
+		case "void":
+			intValue = VOID
+		case "volatile":
+			intValue = VOLATILE
+		case "while":
+			intValue = WHILE
+		}
 	} else if arrayContains(underscoredKeywords, stringGrouping) {
-		tokenType = strings.ToUpper(stringGrouping[1:])
+		switch stringGrouping {
+		case "_Alignas":
+			intValue = ALIGNAS
+		case "_Alignof":
+			intValue = ALIGNOF
+		case "_Atomic":
+			intValue = ATOMIC
+		case "_Bool":
+			intValue = BOOL
+		case "_Complex":
+			intValue = COMPLEX
+		case "_Generic":
+			intValue = GENERIC
+		case "_Imaginary":
+			intValue = IMAGINARY
+		case "_Noreturn":
+			intValue = NORETURN
+		case "_Static_assert":
+			intValue = STATIC_ASSERT
+		case "_Thread_local":
+			intValue = THREAD_LOCAL
+		}
 	} else if stringGrouping == funcName {
-		tokenType = "FUNC_NAME"
+		intValue = FUNC_NAME
 	} else if arrayContains(validMultiCharSymbols, stringGrouping) {
 		switch stringGrouping {
 		case "...":
-			tokenType = "ELLIPSIS"
+			intValue = ELLIPSIS
 		case ">>=":
-			tokenType = "RIGHT_ASSIGN"
+			intValue = RIGHT_ASSIGN
 		case "<<=":
-			tokenType = "LEFT_ASSIGN"
+			intValue = LEFT_ASSIGN
 		case "+=":
-			tokenType = "ADD_ASSIGN"
+			intValue = ADD_ASSIGN
 		case "-=":
-			tokenType = "SUB_ASSIGN"
+			intValue = SUB_ASSIGN
 		case "*=":
-			tokenType = "MUL_ASSIGN"
+			intValue = MUL_ASSIGN
 		case "/=":
-			tokenType = "DIV_ASSIGN"
+			intValue = DIV_ASSIGN
 		case "%=":
-			tokenType = "MOD_ASSIGN"
+			intValue = MOD_ASSIGN
 		case "&=":
-			tokenType = "ADD_ASSIGN"
+			intValue = ADD_ASSIGN
 		case "^=":
-			tokenType = "XOR_ASSIGN"
+			intValue = XOR_ASSIGN
 		case "|=":
-			tokenType = "OR_ASSIGN"
+			intValue = OR_ASSIGN
 		case ">>":
-			tokenType = "RIGHT_OP"
+			intValue = RIGHT_OP
 		case "<<":
-			tokenType = "LEFT_OP"
+			intValue = LEFT_OP
 		case "++":
-			tokenType = "INC_OP"
+			intValue = INC_OP
 		case "--":
-			tokenType = "LEFT_OP"
+			intValue = LEFT_OP
 		case "->":
-			tokenType = "PTR_OP"
+			intValue = PTR_OP
 		case "&&":
-			tokenType = "AND_OP"
+			intValue = AND_OP
 		case "||":
-			tokenType = "OR_OP"
+			intValue = OR_OP
 		case "<=":
-			tokenType = "LE_OP"
+			intValue = LE_OP
 		case ">=":
-			tokenType = "GE_OP"
+			intValue = GE_OP
 		case "==":
-			tokenType = "EQ_OP"
+			intValue = EQ_OP
 		case "!=":
-			tokenType = "NE_OP"
+			intValue = NE_OP
 		}
 	} else if arrayContains(validSingleCharSymbols, stringGrouping) {
 		switch stringGrouping {
 		case "<%":
-			tokenType = "{"
+			runeValue = '{'
 		case "%>":
-			tokenType = "}"
+			runeValue = '}'
 		case "<:":
-			tokenType = "["
+			runeValue = '['
 		case ":>":
-			tokenType = "]"
+			runeValue = ']'
 		default:
-			tokenType = stringGrouping
+			runeValue = []rune(stringGrouping)[0]
 		}
 	} else if checkTypeRegex.MatchString(stringGrouping) {
-		tokenType = "IDENTIFIER" //TODO: Checktype
+		intValue = IDENTIFIER //TODO: Checktype
 	} else if iConstantRegexOne.MatchString(stringGrouping) ||
 		iConstantRegexTwo.MatchString(stringGrouping) ||
 		iConstantRegexThree.MatchString(stringGrouping) ||
 		iConstantRegexFour.MatchString(stringGrouping) {
-		tokenType = "I_CONSTANT"
+		intValue = I_CONSTANT
 	} else if fConstantRegexOne.MatchString(stringGrouping) ||
 		fConstantRegexTwo.MatchString(stringGrouping) ||
 		fConstantRegexThree.MatchString(stringGrouping) ||
 		fConstantRegexFour.MatchString(stringGrouping) ||
 		fConstantRegexFive.MatchString(stringGrouping) {
-		tokenType = "F_CONSTANT"
+		intValue = F_CONSTANT
 	} else if stringLiteralRegex.MatchString(stringGrouping) {
-		tokenType = "STRING_LITERAL"
+		intValue = STRING_LITERAL
 	}
 
-	result = &yyLex{actualVal: stringGrouping, nonTerminalType: tokenType, terminalType: terminalType}
+	result = &yyLex{actualValue: stringGrouping, intValue: intValue, charValue: runeValue}
 
 	return
 }

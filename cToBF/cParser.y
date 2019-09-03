@@ -4,11 +4,7 @@
 package ctobf
 
 import (
-	"bufio"
 	"fmt"
-	"io"
-	"log"
-	"os"
 )
 %}
 
@@ -545,9 +541,9 @@ declaration_list
 %% /* Begin Reader */
 
 type yyLex struct {
-	actualVal string
-	nonTerminalType string
-	terminalType int
+	actualValue string
+	charValue rune
+	intValue int
 }
 
 func (l *yyLex) Error(s string) {
@@ -556,8 +552,13 @@ func (l *yyLex) Error(s string) {
 
 func (l *yyLex) Lex(lval *yySymType) int {
 	// Use tokens!
-
-	return 0;
+	fmt.Printf("yyLex: %s, yySymType: %d\n", l.actualValue, lval.val)
+	if l.charValue != ' ' {
+		// TODO: Temp case
+		return -1
+	} else {
+		return l.intValue
+	}
 }
 
 func parseTokens (tokenSlice []*yyLex) {
