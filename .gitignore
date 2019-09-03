@@ -18,3 +18,4 @@ examples/hello_world/hello_world
 examples/peephole/peephole
 brainfC
 types.txt
+*.output
